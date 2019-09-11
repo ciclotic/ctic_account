@@ -1,0 +1,5 @@
+{% import '/Macro/buttons.html.twig' as buttons %}
+
+{% set metadata = grid.data.requestConfiguration.metadata %}
+
+{{ buttons.create(path('GET_' ~ metadata.parameters.route.root ~ '_' ~  metadata.parameters.route.actions.create), action.label, '-1', true) }}

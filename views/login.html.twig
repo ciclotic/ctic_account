@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cuentas - Login - cicloTIC</title>
+
+    <!-- ========== COMMON STYLES ========== -->
+    <link rel="stylesheet" href="/lib/options-admin/css/bootstrap.min.css" media="screen" >
+    <link rel="stylesheet" href="/lib/options-admin/css/font-awesome.min.css" media="screen" >
+    <link rel="stylesheet" href="/lib/options-admin/css/animate-css/animate.min.css" media="screen" >
+
+    <!-- ========== PAGE STYLES ========== -->
+    <link rel="stylesheet" href="/lib/options-admin/css/prism/prism.css" media="screen" > <!-- USED FOR DEMO HELP - YOU CAN REMOVE IT -->
+
+    <!-- ========== THEME CSS ========== -->
+    <link rel="stylesheet" href="/lib/options-admin/css/main.css" media="screen" >
+
+    <!-- ========== OWN CSS ========== -->
+    <link rel="stylesheet" href="/css/main.css" media="screen" >
+
+    {% block stylesheets %}{% endblock %}
+
+    <!-- ========== MODERNIZR ========== -->
+    <script src="/lib/options-admin/js/modernizr/modernizr.min.js"></script>
+</head>
+<body class="">
+<div class="main-wrapper">
+
+    <div class="">
+        <div class="row">
+            <div class="col-lg-6 visible-lg-block" id="background-login">
+                &nbsp;
+            </div>
+            <!-- /.col-lg-6 -->
+
+            <div class="col-lg-6">
+                <section class="section">
+                    <div class="row mt-40">
+                        <div class="col-md-10 col-md-offset-1 pt-50">
+
+                            <div class="row mt-50 ">
+                                <div class="col-md-11 text-center">
+                                    <img src="/img/logoLetras.png" alt="Cuentas - cicloTIC" class="logo" id="logoLogin">
+                                </div>
+                            </div>
+                            <div class="row mt-10 ">
+                                <div class="col-md-11">
+                                    <div class="panel">
+                                        <div class="panel-heading">
+                                            <div class="panel-title text-center">
+                                                <h4>Cuentas - Login</h4>
+                                            </div>
+                                        </div>
+                                        <div class="panel-body p-20">
+                                            <form class="form-horizontal" method="POST" action="/">
+                                                <div class="form-group">
+                                                    <label for="inputEmail3" class="col-sm-2 control-label">Usuario</label>
+                                                    <div class="col-sm-10">
+                                                        <input type="text" name="name" class="form-control" id="inputEmail3" placeholder="Usuario">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+                                                    <div class="col-sm-10">
+                                                        <input type="password" name="password" class="form-control" id="inputPassword3" placeholder="Password">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group mt-20">
+                                                    <div class="col-sm-offset-2 col-sm-10">
+                                                        <button type="submit" class="btn btn-success btn-labeled pull-right">Entrar<span class="btn-label btn-label-right"><i class="fa fa-check"></i></span></button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <!-- /.text-center -->
+
+                                        </div>
+                                    </div>
+                                    <!-- /.panel -->
+                                    <p class="text-muted text-center"><small>Copyright © cicloTIC {{ "now"|date("Y") }}</small></p>
+                                </div>
+                                <!-- /.col-md-11 -->
+                            </div>
+                            <!-- /.row -->
+                        </div>
+                        <!-- /.col-md-12 -->
+                    </div>
+                    <!-- /.row -->
+                </section>
+
+            </div>
+            <!-- /.col-md-6 -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /. -->
+
+</div>
+<!-- /.main-wrapper -->
+
+<!-- ========== COMMON JS FILES ========== -->
+<script src="/lib/options-admin/js/jquery/jquery-2.2.4.min.js"></script>
+<script src="/lib/options-admin/js/jquery-ui/jquery-ui.min.js"></script>
+<script src="/lib/options-admin/js/bootstrap/bootstrap.min.js"></script>
+<script src="/lib/options-admin/js/pace/pace.min.js"></script>
+<script src="/lib/options-admin/js/lobipanel/lobipanel.min.js"></script>
+<script src="/lib/options-admin/js/iscroll/iscroll.js"></script>
+
+<!-- ========== PAGE JS FILES ========== -->
+
+<!-- ========== THEME JS ========== -->
+<script src="/lib/options-admin/js/main.js"></script>
+
+{% block scriptsjs %}{% endblock %}
+</body>
+</html>

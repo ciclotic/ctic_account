@@ -1,0 +1,114 @@
+{% extends '/base.html.twig' %}
+
+{% set definition = resources.definition %}
+{% set data = resources.data %}
+
+{% set header = metadata.parameters.header|default(metadata.pluralName) %}
+
+{% block title %}- Formulario {{ header }} - {{ data.name|default('Nuevo') }}{% endblock %}
+
+{% block description %}Formulario {{ header }} {{ data.name|default('Nuevo') }}.{% endblock %}
+
+{% block content %}
+    <div class="container-fluid form-{{ metadata.name|lower }}">
+        {% include '/Crud/Form/_header.html.twig' %}
+
+        <div class="form-content">
+            {% include '/Crud/Form/_content.html.twig' %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block tutorial %}
+    <p class="text-center">
+        <button class="btn btn-default" onclick="$('.sidebar-content .close-icon').click(); tourVirtual.show()">
+            Hacer tour virtual
+        </button>
+    </p>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block scriptsjs %}
+    <script type="text/javascript">
+        var tourVirtual = new Anno([{
+            target  : '.page-title-div',
+            position: 'bottom',
+            content : 'Bienvenid@ al tour virtual del formulario de {{ header }}. {{ data.name|default("Nuevo") }}.'
+        }, {
+            target  : '.form-content',
+            position: 'bottom',
+            content : "Aquí tienes los campos a rellenar. Con el botón verde guardarás la información. Por último con el botón gris regresarás al listado sin guardar.",
+        }]);
+
+        // Voice recognition
+
+        if (annyang) {
+            function modificar(id) {
+                var button = $('.savebutton');
+
+                button.click();
+            }
+
+            // Let's define a command.
+            annyang.addCommands({
+                'cancelar': function() {
+                    var button = $('.cancelbutton');
+
+                    button.click();
+                },
+                'modificar': modificar,
+                'editar': modificar,
+                'crear': modificar,
+                'focus *name': function(name) {
+                    var textbox = $('label:contains("' + name + '")').parent().find('input');
+
+                    if (textbox.length <= 0) {
+                        var select = $('label:contains("' + name + '")').parent().find('select');
+                        if (select.length <= 0) {
+                            alert('No se ha encontrado el campo.');
+                        } else {
+                            select.focus();
+                        }
+                    } else {
+                        textbox.select();
+                    }
+                },
+                'escribe *texto': function(texto) {
+                    var textbox = $(document.activeElement);
+
+                    if (textbox.length <= 0) {
+                        alert('No se ha encontrado el campo.');
+                    } else {
+                        textbox.val(texto);
+                    }
+                },
+                'arriba': function() {
+                    var select = $(document.activeElement);
+
+                    if (select.length <= 0) {
+                        alert('No se ha encontrado el campo.');
+                    } else {
+                        if (select.prop('selectedIndex') > 0 && select.children().length > 1) {
+                            select.prop('selectedIndex', select.prop('selectedIndex') - 1);
+                        }
+                    }
+                },
+                'abajo': function() {
+                    var select = $(document.activeElement);
+
+                    if (select.length <= 0) {
+                        alert('No se ha encontrado el campo.');
+                    } else {
+
+                        if (select.prop('selectedIndex') < select.children().length - 1) {
+                            select.prop('selectedIndex', select.prop('selectedIndex') + 1);
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+{% endblock %}

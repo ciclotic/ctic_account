@@ -1,0 +1,133 @@
+{% extends "base.html.twig" %}
+
+{% block title %}- Dashboard{% endblock %}
+
+{% block description %}Usuarios, cuenta, estilos, etc.{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row page-title-div">
+            <div class="col-md-12">
+                <h4 class="title">Dashboard</h4>
+                <p class="sub-title">Configuración.</p>
+            </div>
+            <!-- /.col-md-12 -->
+        </div>
+        <!-- /.row -->
+        <div class="row breadcrumb-div">
+            <div class="col-md-12">
+                <ul class="breadcrumb">
+                    <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
+                    <li class="active">Dashboard</li>
+                </ul>
+            </div>
+            <!-- /.col-md-12 -->
+        </div>
+        <!-- /.row -->
+
+        <div class="container-fluid section">
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <a class="dashboard-stat-2 bg-primary" href="/empresas/listado">
+                        <div class="stat-content">
+                            <span class="number counter"><i class="fa fa-briefcase"></i></span>
+                            <span class="name">Empresas</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <a class="dashboard-stat-2 bg-primary" href="/iva/listado">
+                        <div class="stat-content">
+                            <span class="number counter"><i class="fa fa-money"></i></span>
+                            <span class="name">Iva</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <a class="dashboard-stat-2 bg-primary" href="/irpf/listado">
+                        <div class="stat-content">
+                            <span class="number counter"><i class="fa fa-money"></i></span>
+                            <span class="name">Irpf</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <a class="dashboard-stat-2 bg-primary" href="/metodospago/listado">
+                        <div class="stat-content">
+                            <span class="number counter"><i class="fa fa-money"></i></span>
+                            <span class="name">Métodos de pago</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    &nbsp;
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <a class="dashboard-stat-2 bg-primary" href="/tarifas/listado">
+                        <div class="stat-content">
+                            <span class="number counter"><i class="fa fa-euro"></i></span>
+                            <span class="name">Tarifas</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <a class="dashboard-stat-2 bg-primary" href="/bancos/listado">
+                        <div class="stat-content">
+                            <span class="number counter"><i class="fa fa-bank"></i></span>
+                            <span class="name">Bancos</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <a class="dashboard-stat-2 bg-primary" href="/zonas/listado">
+                        <div class="stat-content">
+                            <span class="number counter"><i class="fa fa-map"></i></span>
+                            <span class="name">Zonas de realización</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <a class="dashboard-stat-2 bg-primary" href="/procedencias/listado">
+                        <div class="stat-content">
+                            <span class="number counter"><i class="fa fa-map"></i></span>
+                            <span class="name">Procedencias</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    &nbsp;
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    &nbsp;
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <a class="dashboard-stat-2 bg-primary" href="/usuarios/listado">
+                        <div class="stat-content">
+                            <span class="number counter"><i class="fa fa-users"></i></span>
+                            <span class="name">Usuarios</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <a class="dashboard-stat-2 bg-primary" href="/sistema/modificar">
+                        <div class="stat-content">
+                            <span class="number counter"><i class="fa fa-gear"></i></span>
+                            <span class="name">Sistema</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scriptsjs %}
+{% endblock %}

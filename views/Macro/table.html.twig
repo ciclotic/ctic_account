@@ -1,0 +1,51 @@
+{% macro headers(grid, definition, requestAttributes) %}
+    {% import '/Macro/sorting.html.twig' as sorting %}
+
+    {% if definition.actionGroups.bulk is defined %}
+        <th></th>
+    {% endif %}
+
+    {% for field in definition.fields %}{#|sort_by('position')#}
+        {% if field.enabled %}
+            {% if field.isSortable %}
+                {{ sorting.tableHeader(grid, field, requestAttributes) }}
+            {% else %}
+                <th class="ctic-table-column-{{ field.name }}">{{ field.label }}</th>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+    {% if definition.actionGroups.item is defined and definition.getEnabledActions('item')|length > 0 %}
+        <th class="ctic-table-column-actions">{{ 'Acciones' }}</th>
+    {% endif %}
+{% endmacro %}
+
+{% macro row(grid, definition, row, class = '') %}
+    <tr class="item {{ class }}">
+    {% if definition.actionGroups.bulk is defined %}
+        <td><input class="bulk-select-checkbox" type="checkbox" value="{{ row.id }}" /></td>
+    {% endif %}
+    {% for field in definition.enabledFields %}{#|sort_by('position')#}
+        <td>{{ ctic_grid_render_field(grid, field, row) }}</td>
+    {% endfor %}
+    {% if definition.actionGroups.item is defined and definition.getEnabledActions('item')|length > 0 %}
+        <td>
+            <div class="row">
+                {% for action in definition.getEnabledActions('item') %}{#|sort_by('position')#}
+                    <div class="col-md-4">
+                        {{ ctic_grid_render_action(grid, action, row) }}
+                    </div>
+                {% endfor %}
+            </div>
+            {% if definition.actionGroups.subitem is defined and definition.getEnabledActions('subitem')|length > 0 %}
+                <div class="row">
+                    {% for action in definition.getEnabledActions('subitem') %}{#|sort_by('position')#}
+                        <div class="col-md-4">
+                            {{ ctic_grid_render_action(grid, action, row) }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </td>
+    {% endif %}
+    </tr>
+{% endmacro %}

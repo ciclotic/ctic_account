@@ -1,0 +1,10 @@
+.idea
+vendor
+cache
+token.json
+img/employee/*
+!img/employee/control.pdf
+proxy/*
+!proxy/control.txt
+composer.lock
+config.yml

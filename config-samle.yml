@@ -1,0 +1,20 @@
+general:
+  dev_mode: false
+  host: 'example.com'
+  locale:
+    default: 'es'
+
+db:
+  driver: 'pdo_mysql'
+  user: 'db_user'
+  password: 'db_password'
+  host: 'db_host'
+  dbname: 'db_name'
+
+modlue_account:
+  path: 'cuentas'
+  host: 'cuentas.example.com'
+
+modlue_main:
+  path: 'grh'
+  host: 'grh.example.com'

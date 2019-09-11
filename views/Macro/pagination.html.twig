@@ -1,0 +1,20 @@
+{% macro simple(paginator, options) %}
+    {% if paginator.haveToPaginate() %}
+        {{ pagerfanta(paginator, 'semantic_ui_translated', options|default({})) }}
+    {% endif %}
+{% endmacro %}
+
+{% macro perPage(paginator, paginationLimits) %}
+    <div class="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            Ver {{ paginator.maxPerPage }}
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="menu1">
+            {% for limit in paginationLimits if limit != paginator.maxPerPage %}
+                {% set path = '/list/5/' %}
+                <li><a class="item" href="{{ path }}">{{ limit }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endmacro %}

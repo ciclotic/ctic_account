@@ -1,0 +1,92 @@
+{% extends '/base.html.twig' %}
+
+{% set definition = resources.definition %}
+{% set data = resources.data %}
+
+{% set header = metadata.parameters.header|default(metadata.pluralName) %}
+
+{% block title %}- Listado {{ header }}{% endblock %}
+
+{% block description %}Listado de {{ header }}.{% endblock %}
+
+{% block content %}
+    <div class="container-fluid index-{{ metadata.name|lower }}">
+        {% include '/Crud/List/_header.html.twig' %}
+
+        {% include '/Crud/List/_content.html.twig' %}
+    </div>
+{% endblock %}
+
+{% block tutorial %}
+    <p class="text-center">
+        <button class="btn btn-default" onclick="$('.sidebar-content .close-icon').click(); tourVirtual.show()">
+            Hacer tour virtual
+        </button>
+    </p>
+{% endblock %}
+
+{% block scriptsjs %}
+    <script type="text/javascript">
+        var tourVirtual = new Anno([{
+            target  : '.page-title-div',
+            position: 'bottom',
+            content : 'Bienvenid@ al tour virtual del listado de {{ header }}.'
+        }, {
+            target  : '#accordionFilters',
+            position: 'bottom',
+            content : "Este es el apartado de filtros. Puedes buscar l@s {{ header }} mediante las opciones de este panel.",
+        }, {
+            target  : 'thead:first',
+            position: 'bottom',
+            content : "Tienes l@s {{ header }} listados en esta tabla.",
+        }, {
+            target  : '.ctic-table-column-actions',
+            position: 'bottom',
+            content : "En esta columna tienes las opciones de mostrar, editar y eliminar l@s {{ header }}.",
+        }, {
+            target  : '.create',
+            position: 'left',
+            content : "Por último aquí tienes la opción de crear {{ header }}.",
+        }])
+
+        // Voice recognition
+        if (annyang) {
+            function modificar(id) {
+                var button = $('.editbutton[id="' + id + '"]');
+
+                if (button == undefined) {
+                    alert('No existe el registro');
+                } else {
+                    button.click();
+                }
+            }
+
+            // Let's define a command.
+            annyang.addCommands({
+                'crear': function() {
+                    $('.create').click();
+                },
+                'modificar *id': modificar,
+                'editar *id': modificar,
+                'mostrar *id': function(id) {
+                    var button = $('.showbutton[id="' + id + '"]');
+
+                    if (button == undefined) {
+                        alert('No existe el registro');
+                    } else {
+                        button.click();
+                    }
+                },
+                'eliminar *id': function(id) {
+                    var button = $('.deletebutton[id="' + id + '"]');
+
+                    if (button == undefined) {
+                        alert('No existe el registro');
+                    } else {
+                        button.click();
+                    }
+                }
+            });
+        }
+    </script>
+{% endblock %}

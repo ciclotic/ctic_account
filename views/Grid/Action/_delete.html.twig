@@ -1,0 +1,5 @@
+{% import '/Macro/buttons.html.twig' as buttons %}
+
+{% set metadata = grid.data.requestConfiguration.metadata %}
+
+{{ buttons.delete(path('POST_' ~ metadata.parameters.route.root ~ '_' ~  metadata.parameters.route.actions.delete, {'id': data.id}), action.label, true, data.id) }}

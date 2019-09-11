@@ -1,0 +1,92 @@
+{% macro default(url, message, id, icon, class) %}
+    <button type="button" class="btn btn-{% if class is empty %}default{% else %}{{ class }}{% endif %}"
+        {% if id is not null %} id="{{ id }}"{% endif %}
+        onclick="window.location = '{{ url }}'"
+    >
+        {% if icon is not empty %}
+            <i class="fa fa-{{ icon }}"></i>
+        {% endif %}
+        {% if message is not empty %}
+            {{ message }}
+        {% endif %}
+    </button>
+{% endmacro %}
+
+{% macro show(url, message, id, class, labeled = true) %}
+    {% import _self as buttons %}
+
+    {% if message is empty and labeled %}
+        {% set message = 'Ver' %}
+    {% endif %}
+
+    {{ buttons.default(url, message, id, 'search', 'default showbutton') }}
+{% endmacro %}
+
+{% macro create(url, message, id, labeled = true) %}
+    {% import _self as buttons %}
+
+    {% if message is empty and labeled %}
+        {% set message = 'Crear' %}
+    {% endif %}
+
+    {{ buttons.default(url, message, id, 'plus', 'primary create') }}
+{% endmacro %}
+
+{% macro edit(url, message, id, labeled = true) %}
+    {% import _self as buttons %}
+
+    {% if message is empty and labeled %}
+        {% set message = 'Editar' %}
+    {% endif %}
+
+    {{ buttons.default(url, message, id, 'pencil', 'default editbutton') }}
+{% endmacro %}
+
+{% macro filter(message) %}
+    <button class="btn btn-success" type="submit">
+        <i class="fa fa-search"></i> {{ message is empty ? 'Filtrar' : message }}
+    </button>
+{% endmacro %}
+
+{% macro resetFilters(url, message) %}
+    <button class="btn btn-default" type="reset">
+        <i class="fa fa-remove"></i> {{ message is empty ? 'Limpiar' : message }}
+    </button>
+{% endmacro %}
+
+{% macro delete(url, message, labeled = true, resourceId = null) %}
+    <form action="{{ url }}" method="post">
+        <input type="hidden" name="_method" value="DELETE">
+        <button class="btn btn-danger deletebutton" type="submit" data-requires-confirmation
+                {% if resourceId is not null %} id="{{ resourceId }}"{% endif %}
+        >
+            <i class="fa fa-trash"></i> {{ (message is empty and labeled) ? 'Eliminar' : message }}
+        </button>
+        {#<input type="hidden" name="_csrf_token" value="{{ csrf_token(resourceId) }}" />#}
+    </form>
+{% endmacro %}
+
+{% macro bulkDelete(url, message, labeled = true) %}
+    <form action="{{ url }}" method="post">
+        <input type="hidden" name="_method" value="DELETE">
+        <button class="btn btn-danger" disabled="disabled" type="submit" data-bulk-action-requires-confirmation>
+            <i class="fa fa-trash"></i> {{ (message is empty and labeled) ? 'Eliminar' : message }}
+        </button>
+        {#<input type="hidden" name="_csrf_token" value="{{ csrf_token('bulk_delete') }}" />#}
+    </form>
+{% endmacro %}
+
+{% macro download(url, message, id, icon, class) %}
+    <form action="{{ url }}" method="post">
+        <button type="submit" class="btn btn-{% if class is empty %}default{% else %}{{ class }}{% endif %}"
+                {% if id is not null %} id="{{ id }}"{% endif %}
+        >
+            {% if icon is not empty %}
+                <i class="fa fa-{{ icon }}"></i>
+            {% endif %}
+            {% if message is not empty %}
+                {{ message }}
+            {% endif %}
+        </button>
+    </form>
+{% endmacro %}

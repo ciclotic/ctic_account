@@ -1,0 +1,622 @@
+
+{%- macro form(form, attr) -%}
+    {% import _self as forms %}
+    {{ forms.form_start(form, attr) }}
+    {{- forms.form_widget(form, attr) -}}
+    {{ forms.form_end(form, attr) }}
+{%- endmacro form -%}
+
+{%- macro form_start(form, attr) -%}
+    {% import _self as forms %}
+    {%- do form.setMethodRendered() -%}
+    {% set method = form.method|upper %}
+    {%- if method in ["GET", "POST"] -%}
+        {% set form_method = method %}
+    {%- else -%}
+        {% set form_method = "POST" %}
+    {%- endif -%}
+    <form{% if form.name != '' %} name="{{ form.name }}"{% endif %} method="{{ form_method|lower }}"{% if form.action != '' %} action="{{ form.action }}"{% endif %}{% for attrname, attrvalue in attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}{% if form.multipart %} enctype="multipart/form-data"{% endif %}>
+    {%- if form_method != method -%}
+        <input type="hidden" name="_method" value="{{ method }}" />
+    {%- endif -%}
+{%- endmacro form_start -%}
+
+{%- macro form_end(form, attr) -%}
+    {% import _self as forms %}
+    {%- if not form.render_rest is defined or form.render_rest -%}
+        {{ forms.form_rest(form, attr) }}
+    {%- endif -%}
+    </form>
+{%- endmacro form_end -%}
+
+{% macro form_row(form, attr) -%}
+    {% import _self as forms %}
+    {% set vars = form.vars %}
+    <div class="form-group {% if vars.required %}required {% endif %} {% if vars.force_error|default(false) and not vars.valid %} error{% endif %}">
+        {{- forms.form_label(form, attr) -}}
+        {{- forms.form_widget(form, attr) -}}
+        {{- forms.form_errors(form, form.vars.errors) -}}
+    </div>
+{%- endmacro form_row %}
+
+{%- macro form_rows(form, attr) -%}
+    {% import _self as forms %}
+    {% for child in form if not child.rendered %}
+        {{- forms.form_row(child, attr) -}}
+    {% endfor %}
+{%- endmacro form_rows -%}
+
+{%- macro form_rest(form, attr) -%}
+    {% import _self as forms %}
+    {% for child in form -%}
+        {% if not child.rendered %}
+            {{- forms.form_row(child, attr) -}}
+        {% endif %}
+    {%- endfor -%}
+
+    {% if not form.methodRendered %}
+        {%- do form.setMethodRendered() -%}
+        {% set method = form.method|upper %}
+        {%- if method in ["GET", "POST"] -%}
+            {% set form_method = method %}
+        {%- else -%}
+            {% set form_method = "POST" %}
+        {%- endif -%}
+
+        {%- if form_method != method -%}
+            <input type="hidden" name="_method" value="{{ method }}" />
+        {%- endif -%}
+    {% endif -%}
+{% endmacro form_rest %}
+
+{% macro attributes(attr) -%}
+    {%- for attrname, attrvalue in attr -%}
+        {{- " " -}}
+        {%- if attrname in ['placeholder', 'title'] -%}
+            {{- attrname }}="attrvalue"
+        {%- elseif attrname == 'class' -%}
+            {{- attrname }}="form-control {{ attrname }}"
+        {%- elseif attrvalue is same as(true) -%}
+            {{- attrname }}="{{ attrname }}"
+        {%- elseif attrvalue is not same as(false) -%}
+            {{- attrname }}="{{ attrvalue }}"
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro attributes -%}
+
+{%- macro button_attributes(form, attr) -%}
+    {% import _self as forms %}
+    id="{{ form.id }}" name="{{ form.full_name }}"{% if form.disabled %} disabled="disabled"{% endif -%}
+    {{ forms.attributes(attr) }}
+{%- endmacro button_attributes -%}
+
+{%- macro widget_attributes(form, attr) -%}
+    {% import _self as forms %}
+
+    {% set vars = form.vars %}
+
+    id="{{ vars.id }}" name="{{ vars.full_name }}"
+    {%- if 'class' not in attr|keys %} class="form-control"{% endif -%}
+    {%- if vars.disabled %} disabled="disabled"{% endif -%}
+    {%- if vars.required %} required="required"{% endif -%}
+    {{ forms.attributes(attr) }}
+{%- endmacro widget_attributes -%}
+
+{# Errors #}
+
+{%- macro form_errors(form, errors) -%}
+    {% import _self as forms %}
+    {%- if errors|length > 0 -%}
+        {%- for error in errors -%}
+            <div class="{% if form.parent is not empty %}pointing {% endif %}label validation-error"{% if form.parent is empty %} style="margin-bottom: 10px;"{% endif %}>
+                {{ error.message }}
+            </div>
+        {%- endfor -%}
+    {%- endif -%}
+{%- endmacro form_errors -%}
+
+{# Labels #}
+
+{%- macro form_label(form, attr) -%}
+    {% import _self as forms %}
+
+    {% set vars = form.vars %}
+
+    {% if vars.label is not same as(false) or attr.label is not empty -%}
+        {% if vars.label_attr is not empty %}
+            {% set label_attr = vars.label_attr|merge({'for': vars.id}) %}
+        {% else %}
+            {% set label_attr = {'for': vars.id} %}
+        {% endif %}
+        {% if vars.required -%}
+            {% set label_attr = label_attr|merge({'class': (vars.label_attr.class|default('') ~ ' required')|trim}) %}
+        {%- endif -%}
+        {% if vars.label is empty -%}
+            {%- if attr.label is not empty -%}
+                {% set label = attr.label %}
+            {%- elseif vars.label_format is not empty -%}
+                {% set label = vars.label_format|replace({
+                    '%name%': vars.name,
+                    '%id%': vars.id,
+                }) %}
+            {%- endif -%}
+        {%- else -%}
+            {% set label = vars.label %}
+        {%- endif -%}
+        <{{ vars.element|default('label') }}{% if vars.label_attr %}{% with { attr: vars.label_attr } %}{{ forms.attributes(vars.label_attr) }}{% endwith %}{% endif %}>
+        {{- label -}}
+        </{{ vars.element|default('label') }}>
+    {%- endif -%}
+{%- endmacro form_label -%}
+
+{# Help #}
+
+{% macro form_help(form, attr) -%}
+    {%- if form.help is not empty -%}
+        {%- set help_attr = form.help_attr|merge({class: (form.help_attr.class|default('') ~ ' help-text')|trim}) -%}
+
+        <p id="{{ form.id }}_help" {% for attrname, attrvalue in help_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+        {{- form.help -}}
+        </p>
+    {%- endif -%}
+{%- endmacro form_help %}
+
+{# Form types rows #}
+{%- macro button_row(form, attr) -%}
+    {% import _self as forms %}
+    <div>
+        {{- forms.widget(form, attr) -}}
+    </div>
+{%- endmacro button_row -%}
+
+{%- macro hidden_row(form, attr) -%}
+    {% import _self as forms %}
+    {{ forms.form_widget(form, attr) }}
+{%- endmacro hidden_row -%}
+
+{# Form types wodgets #}
+
+{%- macro form_widget(form, attr) -%}
+    {% import _self as forms %}
+    {{- forms.form_widget_simple(form, attr) -}}
+{%- endmacro form_widget -%}
+
+{%- macro form_widget_simple(form, attr) -%}
+    {% import _self as forms %}
+    {%- set vars = form.vars -%}
+    {%- set type = vars.block_prefixes[1]|default('text') -%}
+    {%- set extendType = vars.block_prefixes[2]|default('text') -%}
+    {% if extendType == 'eventemployee' %}
+        {{- forms.eventemployee_widget(form, attr) -}}
+    {% elseif type == 'ctic_app_employeeattached' %}
+        {{- forms.employeeattached_widget(form, attr) -}}
+    {% elseif type == 'ctic_app_paymentmethodexpire' %}
+        {{- forms.ctic_app_paymentmethodexpire_widget(form, attr) -}}
+    {% elseif type == 'choice' %}
+        {{- forms.choice_widget(form, attr) -}}
+    {% elseif type == 'checkbox' %}
+        {{- forms.checkbox_widget(form, attr) -}}
+    {% elseif extendType == 'textarea' %}
+        {{- forms.textarea_widget(form, attr) -}}
+    {% elseif type == 'time' %}
+        {{- forms.time_widget(form, attr) -}}
+    {% elseif type == 'date' %}
+        {{- forms.date_widget(form, attr) -}}
+    {% elseif type == 'datetime' %}
+        {{- forms.datetime_widget(form, attr) -}}
+    {% elseif type == 'file' %}
+        <div>
+            <a href="#" class="file" data-value="{{ vars.data.fileName }}">{{ vars.data.fileName }}</a>
+        </div>
+        <input type="{{ type }}" {{ forms.widget_attributes(form, attr) }} {% if vars.value is not empty %}value="{{ vars.value }}" {% endif %}/>
+    {% elseif type == 'collection' %}
+        {{- forms.collection_widget(form, attr) -}}
+    {% else %}
+        <input type="{{ type }}" {{ forms.widget_attributes(form, attr) }} {% if vars.value is not empty %}value="{{ vars.value }}" {% endif %}/>
+    {% endif %}
+{%- endmacro form_widget_simple -%}
+
+{% macro collection_widget(form, attr) -%}
+    {% import _self as forms %}
+    {% set vars = form.vars %}
+    {% set name = vars.name %}
+
+    {% spaceless %}
+        <div data-form-type="collection" id="{{ vars.id }}" class="container"
+                {% if vars.prototype is defined and vars.allow_add %}
+                    data-prototype='{{ forms.collection_item(vars.prototype, vars.allow_delete, '__name__', vars.name)|e }}'
+                {%- endif -%}
+        >
+            {{ forms.form_errors(form, vars.errors) }}
+
+            {% if vars.prototypes|default is iterable %}
+                {% for key, subPrototype in vars.prototypes %}
+                    <input type="hidden" data-form-prototype="{{ key }}" value="{{ forms.collection_item(subPrototype, vars.allow_delete, '__name__')|e }}" />
+                {% endfor %}
+            {% endif %}
+
+            <div class="row" data-form-collection="list">
+                {% for child in form %}
+                    {{ forms.collection_item(child, vars.allow_delete, loop.index0, vars.name) }}
+                {% endfor %}
+            </div>
+
+            {% if vars.prototype is defined and vars.allow_add %}
+                <div class="row">
+                    <div class="col-md-3">
+                        <a href="#" class="btn btn-success" data-form-collection="add">
+                            <i class="fa fa-plus"></i>
+                            Añadir
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+
+        </div>
+    {% endspaceless %}
+{%- endmacro collection_widget %}
+
+{% macro collection_item(form, allow_delete, index, parent_name) %}
+    {% import _self as forms %}
+    {% set vars = form.vars %}
+
+    {% spaceless %}
+        <div class="col-md-4" data-form-collection="item" data-form-collection-index="{{ index }}">
+            {{ forms.form_widget(form) }}
+            {% if allow_delete %}
+                <div class="row">
+                    <div class="col-md-4">
+                        <a href="#" data-form-collection="delete" class="btn btn-danger" style="margin-bottom: 1em;">
+                            <i class="fa fa-remove"></i>
+                            Eliminar
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    {% endspaceless %}
+{% endmacro %}
+
+{%- macro button_widget(form, attr) -%}
+    {% import _self as forms %}
+    {%- if form.label is empty -%}
+        {%- if form.label_format is not empty -%}
+            {% set label = form.label_format|replace({
+                '%name%': form.name,
+                '%id%': form.id,
+            }) %}
+        {%- else -%}
+            {% set label = form.name %}
+        {%- endif -%}
+    {%- else -%}
+        {% set label = form.label %}
+    {%- endif -%}
+    <button type="{{ type|default('button') }}" {{ forms.button_attributes(form, attr) }}>{{ label }}</button>
+{%- endmacro button_widget -%}
+
+{%- macro checkbox_widget(form, attr) -%}
+    {% import _self as forms %}
+    {% set vars = form.vars %}
+    <input type="checkbox" {{ forms.widget_attributes(form, attr) }}{% if vars.value == '1' %} checked="checked"{% endif %} />
+{%- endmacro checkbox_widget -%}
+
+{%- macro radio_widget(form, attr) -%}
+    {% import _self as forms %}
+    <input type="radio" {{ forms.widget_attributes(form, attr) }}{% if form.value is defined %} value="{{ form.value }}"{% endif %} />
+{%- endmacro radio_widget -%}
+
+{%- macro datetime_widget(form, attr) -%}
+    {% import _self as forms %}
+    {% if widget == 'single_text' %}
+        {{- forms.form_widget_simple(form, attr) -}}
+    {%- else -%}
+        <div>
+            {{- forms.form_errors(form.date, form.date.errors) -}}
+            {{- forms.form_errors(form.time, form.time.errors) -}}
+            {{- forms.form_widget(form.date, attr) -}}
+            {{- forms.form_widget(form.time, attr) -}}
+        </div>
+    {%- endif -%}
+{%- endmacro datetime_widget -%}
+
+{%- macro date_widget(form, attr) -%}
+    {% import _self as forms %}
+    {%- if widget == 'single_text' -%}
+        {{ forms.form_widget_simple() }}
+    {%- else -%}
+        <div class="row">
+            <div class="col-lg-3 col-md-12 col-xs-12">
+                {{ forms.form_widget(form.year, attr) }}
+            </div>
+            <div class="col-lg-3 col-md-12 col-xs-12">
+                {{ forms.form_widget(form.month, attr) }}
+            </div>
+            <div class="col-lg-3 col-md-12 col-xs-12">
+                {{ forms.form_widget(form.day, attr) }}
+            </div>
+        </div>
+    {%- endif -%}
+{%- endmacro date_widget -%}
+
+{%- macro time_widget(form, attr) -%}
+    {% import _self as forms %}
+    {%- if widget == 'single_text' -%}
+        {{ forms.form_widget_simple() }}
+    {%- else -%}
+        {%- set vars = widget == 'text' ? { 'size': 1 } : {} -%}
+        {%- set with_minutes = 1 -%}
+        <br>
+        <div class="row">
+            <div class="col-lg-3 col-md-12 col-xs-12">
+                {{ forms.form_widget(form.hour, vars) }}
+            </div>
+            <div class="col-lg-1 col-md-12 col-xs-12">
+                {% if with_minutes %}:{% endif %}
+            </div>
+            <div class="col-lg-3 col-md-12 col-xs-12">
+                {% if with_minutes %}{{ forms.form_widget(form.minute, vars) }}{% endif %}
+            </div>
+            <div class="col-lg-1 col-md-12 col-xs-12">
+                {% if with_seconds %}:{% endif %}
+            </div>
+            <div class="col-lg-3 col-md-12 col-xs-12">
+                {% if with_seconds %}:{{ forms.form_widget(form.second, vars) }}{% endif %}
+            </div>
+        </div>
+    {%- endif -%}
+{%- endmacro time_widget -%}
+
+{%- macro dateinterval_widget(form, attr) -%}
+    {% import _self as forms %}
+    {%- if widget == 'single_text' -%}
+        {{- forms.form_widget_simple() -}}
+    {%- else -%}
+        <div>
+            {{- forms.form_errors(form, form.errors) -}}
+            <table class="{{ table_class|default('') }}" role="presentation">
+                <thead>
+                <tr>
+                    {%- if with_years %}<th>{{ forms.form_label(form.years, attr) }}</th>{% endif -%}
+                    {%- if with_months %}<th>{{ forms.form_label(form.months, attr) }}</th>{% endif -%}
+                    {%- if with_weeks %}<th>{{ forms.form_label(form.weeks, attr) }}</th>{% endif -%}
+                    {%- if with_days %}<th>{{ forms.form_label(form.days, attr) }}</th>{% endif -%}
+                    {%- if with_hours %}<th>{{ forms.form_label(form.hours, attr) }}</th>{% endif -%}
+                    {%- if with_minutes %}<th>{{ forms.form_label(form.minutes, attr) }}</th>{% endif -%}
+                    {%- if with_seconds %}<th>{{ forms.form_label(form.seconds, attr) }}</th>{% endif -%}
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    {%- if with_years %}<td>{{ forms.form_widget(form.years, attr) }}</td>{% endif -%}
+                    {%- if with_months %}<td>{{ forms.form_widget(form.months, attr) }}</td>{% endif -%}
+                    {%- if with_weeks %}<td>{{ forms.form_widget(form.weeks, attr) }}</td>{% endif -%}
+                    {%- if with_days %}<td>{{ forms.form_widget(form.days, attr) }}</td>{% endif -%}
+                    {%- if with_hours %}<td>{{ forms.form_widget(form.hours, attr) }}</td>{% endif -%}
+                    {%- if with_minutes %}<td>{{ forms.form_widget(form.minutes, attr) }}</td>{% endif -%}
+                    {%- if with_seconds %}<td>{{ forms.form_widget(form.seconds, attr) }}</td>{% endif -%}
+                </tr>
+                </tbody>
+            </table>
+            {%- if with_invert %}{{ forms.form_widget(form.invert, attr) }}{% endif -%}
+        </div>
+    {%- endif -%}
+{%- endmacro dateinterval_widget -%}
+
+{%- macro number_widget(form, attr) -%}
+    {% import _self as forms %}
+    {# type="number" doesn't work with floats #}
+    {%- set type = type|default('text') -%}
+    {{ forms.form_widget_simple(form, attr) }}
+{%- endmacro number_widget -%}
+
+{%- macro integer_widget(form, attr) -%}
+    {% import _self as forms %}
+    {%- set type = type|default('number') -%}
+    {{ forms.form_widget_simple(form, attr) }}
+{%- endmacro integer_widget -%}
+
+{%- macro url_widget(form, attr) -%}
+    {% import _self as forms %}
+    {%- set type = type|default('url') -%}
+    {{ forms.form_widget_simple(form, attr) }}
+{%- endmacro url_widget -%}
+
+{%- macro search_widget(form, attr) -%}
+    {% import _self as forms %}
+    {%- set type = type|default('search') -%}
+    {{ forms.form_widget_simple(form, attr) }}
+{%- endmacro search_widget -%}
+
+{%- macro percent_widget(form, attr) -%}
+    {% import _self as forms %}
+    {%- set type = type|default('text') -%}
+    {{ forms.form_widget_simple(form, attr) }} %
+{%- endmacro percent_widget -%}
+
+{%- macro password_widget(form, attr) -%}
+    {% import _self as forms %}
+    {%- set type = type|default('password') -%}
+    {{ forms.form_widget_simple(form, attr) }}
+{%- endmacro password_widget -%}
+
+{%- macro hidden_widget(form, attr) -%}
+    {% import _self as forms %}
+    {%- set type = type|default('hidden') -%}
+    {{ forms.form_widget_simple(form, attr) }}
+{%- endmacro hidden_widget -%}
+
+{%- macro email_widget(form, attr) -%}
+    {% import _self as forms %}
+    {%- set type = type|default('email') -%}
+    {{ forms.form_widget_simple(form, attr) }}
+{%- endmacro email_widget -%}
+
+{%- macro range_widget(form, attr) -%}
+    {% import _self as forms %}
+    {% set type = type|default('range') %}
+    {{- forms.form_widget_simple(form, attr) -}}
+{%- endmacro range_widget %}
+
+{%- macro textarea_widget(form, attr) -%}
+    {% import _self as forms %}
+    {% set vars = form.vars %}
+    <textarea {{ forms.widget_attributes(form, attr) }} rows="10" cols="80">{{ vars.value }}</textarea>
+{%- endmacro textarea_widget -%}
+
+{%- macro employeeattached_widget(form, attr) -%}
+    {% import _self as forms %}
+
+    {{ forms.form_row(form.children.attached) }}
+{%- endmacro employeeattached_widget -%}
+
+{%- macro ctic_app_paymentmethodexpire_widget(form, attr) -%}
+    {% import _self as forms %}
+
+    {{ forms.form_row(form.children.id) }}
+    {{ forms.form_row(form.children.days) }}
+    {{ forms.form_row(form.children.percentage) }}
+{%- endmacro ctic_app_paymentmethodexpire_widget -%}
+
+{%- macro eventemployee_widget(form, attr) -%}
+    {% import _self as forms %}
+    {% if form.expanded %}
+        {{- forms.eventemployee_widget_expanded(form, attr) -}}
+    {% else %}
+        {{- forms.eventemployee_widget_collapsed(form, attr) -}}
+    {% endif %}
+{%- endmacro eventemployee_widget -%}
+
+{%- macro eventemployee_widget_collapsed(form, attr) -%}
+    {% import _self as forms %}
+
+    {% set vars = form.vars %}
+
+    {%- if vars.required and vars.placeholder is none and not vars.placeholder_in_choices and not vars.multiple and (attr.size is not defined or attr.size <= 1) -%}
+        {% set required = false %}
+    {%- else -%}
+        {% set required = true %}
+    {%- endif -%}
+    <table class="table table-striped" id="eventemployee">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Empleado</th>
+                <th>Área</th>
+                <th>Categoría</th>
+                <th>Turno</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{- forms.eventemployee_widget_options(form, attr) -}}
+        </tbody>
+    </table>
+{%- endmacro eventemployee_widget_collapsed -%}
+
+{%- macro eventemployee_widget_options(form, attr) -%}
+    {% import _self as forms %}
+
+    {% set vars = form.vars %}
+    {% set eventEmployeeValues = form.parent.vars.value.eventEmployee %}
+    {% set employeeValues = {} %}
+    {% for eventEmployeeValue in eventEmployeeValues %}
+        {% set employeeId = 'employee' ~ eventEmployeeValue.employee.id %}
+        {% set eventEmployeeTurn = eventEmployeeValue.turn %}
+        {% set employeeValue = {(employeeId) : (eventEmployeeTurn)} %}
+        {% set employeeValues = employeeValues|merge(employeeValue) %}
+    {% endfor %}
+    {%- set options = vars.choices -%}
+    {% for group_label, choice in options %}
+        <tr>
+            <th scope="row">
+                <input type="checkbox" value="{{ choice.value }}"
+                       {% if 'employee' ~ choice.value in employeeValues|keys %}checked="checked" {% endif %}
+                        {% if vars.multiple and choice.value in vars.value %}checked="checked" {% endif %}
+                       name="{{ vars.full_name|default('nameNotFound')|replace({'[]': '[' ~ choice.value ~ ']'}) }}[value]"
+                       class="form-control">
+            </th>
+            <td>{{ choice.data.name }} {{ choice.data.surname }}</td>
+            <td>
+                {% for employeeArea in choice.data.employeeArea %}
+                    <div>{{ employeeArea.name }}</div>
+                {% endfor %}
+            </td>
+            <td>
+                {% for employeeCategory in choice.data.employeeCategory %}
+                    <div>{{ employeeCategory.name }}</div>
+                {% endfor %}
+            </td>
+            <td>
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <input type="radio"
+                               name="{{ vars.full_name|default('nameNotFound')|replace({'[]': '[' ~ choice.value ~ ']'}) }}[turn]"
+                               {% if 'employee' ~ choice.value in employeeValues|keys and employeeValues['employee' ~ choice.value] == 0 %}checked="checked" {% endif %}
+                               value="0" class="form-control"> Concierto
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <input type="radio" name="{{ vars.full_name|default('nameNotFound')|replace({'[]': '[' ~ choice.value ~ ']'}) }}[turn]"
+                               {% if 'employee' ~ choice.value in employeeValues|keys and employeeValues['employee' ~ choice.value] == 1 %}checked="checked" {% endif %}
+                               value="1" class="form-control"> Discoteca
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <input type="radio" name="{{ vars.full_name|default('nameNotFound')|replace({'[]': '[' ~ choice.value ~ ']'}) }}[turn]"
+                               {% if 'employee' ~ choice.value in employeeValues|keys and employeeValues['employee' ~ choice.value] == 2 %}checked="checked" {% endif %}
+                               value="2" class="form-control"> Ambos
+                    </div>
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+{%- endmacro eventemployee_widget_options -%}
+
+{%- macro choice_widget(form, attr) -%}
+    {% import _self as forms %}
+    {% if form.expanded %}
+        {{- forms.choice_widget_expanded(form, attr) -}}
+    {% else %}
+        {{- forms.choice_widget_collapsed(form, attr) -}}
+    {% endif %}
+{%- endmacro choice_widget -%}
+
+{%- macro choice_widget_collapsed(form, attr) -%}
+    {% import _self as forms %}
+
+    {% set vars = form.vars %}
+
+    {%- if vars.required and vars.placeholder is none and not vars.placeholder_in_choices and not vars.multiple and (attr.size is not defined or attr.size <= 1) -%}
+        {% set required = false %}
+    {%- else -%}
+        {% set required = true %}
+    {%- endif -%}
+    <select {{ forms.widget_attributes(form, attr) }}{% if vars.multiple %} multiple="multiple"{% endif %}>
+        {%- if vars.placeholder is not none -%}
+            <option value=""{% if vars.required and vars.value is empty %} selected="selected"{% endif %}>{{ vars.placeholder }}</option>
+        {%- endif -%}
+        {%- if vars.preferred_choices|length > 0 -%}
+            {% set options = vars.preferred_choices %}
+            {{- forms.choice_widget_options(options, attr) -}}
+            {%- if vars.choices|length > 0 and vars.separator is not none -%}
+                <option disabled="disabled">{{ separator }}</option>
+            {%- endif -%}
+        {%- endif -%}
+        {{- forms.choice_widget_options(form, attr) -}}
+    </select>
+{%- endmacro choice_widget_collapsed -%}
+
+{%- macro choice_widget_options(form, attr) -%}
+    {% import _self as forms %}
+
+    {% set vars = form.vars %}
+    {%- set options = vars.choices -%}
+
+    {% for group_label, choice in options %}
+        {%- if choice is iterable -%}
+            <optgroup label="{{ group_label }}">
+                {% set optionsGroup = choice %}
+                {{- forms.choice_widget_options(optionsGroup, attr) -}}
+            </optgroup>
+        {%- else -%}
+            <option value="{{ choice.value }}" {% if vars.value == choice.value %}selected="selected" {% endif %}{% if vars.multiple and choice.value in vars.value %}selected="selected" {% endif %}{% if choice.attr %}{% with { attr: choice.attr } %}{{ forms.attributes(attr) }}{% endwith %}{% endif %}>{{ choice.label }}</option>
+        {%- endif -%}
+    {% endfor %}
+{%- endmacro choice_widget_options -%}

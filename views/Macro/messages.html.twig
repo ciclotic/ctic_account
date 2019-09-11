@@ -1,0 +1,29 @@
+{% macro default(message, icon, type, header) %}
+    <div class="panel panel-{{ type|default('primary') }} no-border">
+        {% if type is not empty %}
+        <div class="panel-heading">
+            <div class="panel-title">
+                <h5><i class="{{ icon }} icon"></i> {{ header|default(type) }}</h5>
+            </div>
+        </div>
+        {% endif %}
+        <div class="panel-body">
+            {{ message }}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro info(message) %}
+    {% import _self as messages %}
+    {{ messages.default(message, 'info', 'primary', 'Información') }}
+{% endmacro %}
+
+{% macro success(message) %}
+    {% import _self as messages %}
+    {{ messages.default(message, 'check', 'success', 'Hecho!') }}
+{% endmacro %}
+
+{% macro error(message) %}
+    {% import _self as messages %}
+    {{ messages.default(message, 'remove', 'danger', 'Error') }}
+{% endmacro %}

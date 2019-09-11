@@ -1,0 +1,9 @@
+{% import '/Macro/buttons.html.twig' as buttons %}
+
+{% if paths is defined and paths.cancel is defined %}
+    {% set url = paths.cancel %}
+{% else %}
+    {% set url = '#' %}
+{% endif %}
+
+{{ buttons.default(url, 'Cancelar', null, '', 'default cancelbutton') }}

@@ -1,0 +1,8 @@
+{% import '/Macro/buttons.html.twig' as buttons %}
+
+{% set metadata = grid.data.requestConfiguration.metadata %}
+
+{% set request = grid.data.requestConfiguration.request %}
+{% set route = request.attributes.get('_route') %}
+
+{{ buttons.download(path('POST_' ~ metadata.parameters.route.root ~ '_' ~  metadata.parameters.route.actions.download), action.label, 'download', 'download') }}

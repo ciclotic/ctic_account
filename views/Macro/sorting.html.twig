@@ -1,0 +1,44 @@
+{% macro tableHeader(grid, field, request) %}
+    {% from _self import link %}
+
+    {% if grid.isSortedBy(field.name) %}
+        {% set order = grid.getSortingOrder(field.name) %}
+        <th class="sortable sorted {{ order == 'desc' ? 'descending' : 'ascending' }} ctic-table-column-{{ field.name }}">
+            <a href="{{ link(field.name, request, (order == 'desc' ? 'asc' : 'desc')) }}">
+                {{ field.label }} <i class="fa fa-{{ (order == 'desc' ? 'arrow-up' : 'arrow-down') }}"></i>
+            </a>
+        </th>
+    {% else %}
+        <th class="sortable ctic-table-column-{{ field.name }}">
+            <a href="{{ link(field.name, request, 'asc') }}">
+                {{ field.label }} <i class="fa fa-sort"></i>
+            </a>
+        </th>
+    {% endif %}
+{% endmacro %}
+
+{% macro link(fieldName, request, order) %}
+    {% set requestQuery = request.query %}
+    {% set requestAttributes = request.attributes %}
+    {% if requestQuery is not empty %}
+        {% set params = {'sorting': requestQuery.get('sorting'), 'page': requestQuery.get('page'), 'filters': requestQuery.get('filters')} %}
+    {% else %}
+        {% set params = {} %}
+    {% endif %}
+    {% set sorting = {'sorting': {(fieldName): (order)}} %}
+
+    {{ path(requestAttributes.get('_route'), params|merge(sorting)) }}
+{% endmacro %}
+
+{% macro pageLink(request, page = 1) %}
+    {% set requestQuery = request.query %}
+    {% set requestAttributes = request.attributes %}
+    {% if requestQuery is not empty %}
+        {% set params = {'sorting': requestQuery.get('sorting'), 'page': requestQuery.get('page'), 'filters': requestQuery.get('filters')} %}
+    {% else %}
+        {% set params = {} %}
+    {% endif %}
+    {% set page = {'page': page} %}
+
+    {{ path(requestAttributes.get('_route'), params|merge(page)) }}
+{% endmacro %}

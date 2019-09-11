@@ -1,0 +1,5 @@
+{% import '/Macro/buttons.html.twig' as buttons %}
+
+{% set metadata = grid.data.requestConfiguration.metadata %}
+
+{{ buttons.default(path('GET_' ~ metadata.parameters.route.root ~ '_' ~  metadata.parameters.route.actions.show, {'id': data.id}), action.label, data.id, 'search', 'default showbutton') }}

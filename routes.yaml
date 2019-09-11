@@ -1,0 +1,13 @@
+login:
+    path:     /
+    defaults:
+        _controller: 'CTIC\Account\Account\Infrastructure\Controller\LoginController'
+        _controller_method: 'loginAction'
+        _controller_create: 'CTIC\Account\Account\Application\CreateLoginController'
+
+logout:
+    path:     /logout
+    defaults:
+        _controller: 'CTIC\Account\Account\Infrastructure\Controller\LoginController'
+        _controller_method: 'logoutAction'
+        _controller_create: 'CTIC\Account\Account\Application\CreateLoginController'

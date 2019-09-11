@@ -1,0 +1,9 @@
+{% import '/Macro/buttons.html.twig' as buttons %}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="text-right">
+            {{ buttons.create(path('GET_' ~ metadata.parameters.route.root ~ '_' ~  metadata.parameters.route.actions.create), 'Crear', '-1', true) }}
+        </div>
+    </div>
+</div>

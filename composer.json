@@ -1,0 +1,43 @@
+{
+    "require": {
+        "php": "^7.1.3",
+        "silex/silex": "~2.0",
+        "doctrine/orm": "*",
+        "doctrine/data-fixtures": "^1.3",
+        "phpunit/phpunit": "^7",
+        "symfony/validator": "*",
+        "twig/twig": "2.6.0",
+        "symfony/property-access": "^4.1",
+        "symfony/dependency-injection": "^4.1",
+        "symfony/expression-language": "^4.1",
+        "symfony/routing": "^4.1",
+        "symfony/yaml": "^4.1",
+        "symfony/config": "^4.1",
+        "symfony/templating": "^4.1",
+        "jms/serializer": "^1.13",
+        "symfony/serializer": "^4.1",
+        "symfony/form": "^4.1",
+        "winzou/state-machine": "^0.3.3",
+        "pagerfanta/pagerfanta": "^2.0",
+        "symfony/security": "^4.1",
+        "sylius/grid": "^1.3",
+        "willdurand/hateoas": "^2.12",
+        "nette/security": "^2.4",
+        "symfony/translation": "^4.2",
+        "cocur/slugify": "^3.1",
+        "mpdf/mpdf": "^7.1",
+        "phpmailer/phpmailer": "^6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "CTIC\\Account\\": "src/Account/",
+            "CTIC\\App\\": "../config/src/App/",
+            "CTIC\\Warehouse\\": "../almacenes/src/Warehouse/",
+            "CTIC\\Grh\\": "../grh/src/Grh/",
+            "CTIC\\Device\\": "../dispositivos/src/Device/",
+            "CTIC\\Product\\": "../productos/src/Product/",
+            "CTIC\\Customer\\": "../clientes/src/Customer/",
+            "CTIC\\Document\\": "../documentos/src/Document/"
+        }
+    }
+}

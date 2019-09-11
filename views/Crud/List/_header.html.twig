@@ -1,0 +1,33 @@
+<div class="row page-title-div">
+    <div class="col-md-12">
+        <h4 class="title">Listado {{ header }}</h4>
+    </div>
+    <!-- /.col-md-12 -->
+</div>
+<!-- /.row -->
+<div class="row breadcrumb-div">
+    <div class="col-md-12">
+        <ul class="breadcrumb">
+            <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
+            <li class="active">Listado {{ header }}</li>
+        </ul>
+    </div>
+    <!-- /.col-md-12 -->
+</div>
+<!-- /.row -->
+
+<div class="container-fluid section">
+    <div class="row">
+        <div class="col-md-12">
+            Listado de {{ header }}
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid section">
+    <div class="row">
+        <div class="col-md-12">
+            {% include '/Crud/List/_actions.html.twig' %}
+        </div>
+    </div>
+</div>

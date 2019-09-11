@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+
+    <title>Cuentas {% block title %}- Dashboard{% endblock %} - cicloTIC</title>
+    <!-- TODO <link rel="icon" href="img/icon.png">-->
+    <meta name="description" content="Cuentas. {% block description %}Usuarios, cuenta, estilos, etc.{% endblock %}">
+    <meta name="keywords" content="Cuentas,Usuarios,cuenta,estilos">
+    <meta name="author" content="Valentí Gàmez">
+
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Cuentas. {{ block('title') }} - cicloTIC">
+    <!-- TODO <meta property="og:url" content="https://www.ciclotic.com">-->
+    <meta property="og:site_name" content="Cuentas. {{ block('title') }} - cicloTIC">
+    <!-- TODO <meta property="fb:app_id" content="111">-->
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Cuentas. {{ block('title') }} - cicloTIC">
+
+    <meta property="og:description" content="Cuentas. {{ block('description') }}">
+    <!-- TODO <meta property="og:image" content="http://www.valentigamez.com/blog/images/bienvenidos.jpg">
+    <meta property="og:image:secure_url" content="https://www.valentigamez.com/blog/images/bienvenidos.jpg">-->
+
+    <meta property="twitter:description" content="Cuentas. {{ block('description') }}">
+    <!-- TODO <meta property="twitter:image" content="https://www.valentigamez.com/blog/images/bienvenidos.jpg">-->
+
+    <!-- ========== COMMON STYLES ========== -->
+    <link rel="stylesheet" href="/lib/options-admin/css/bootstrap.min.css" media="screen" >
+    <link rel="stylesheet" href="/lib/options-admin/css/font-awesome.min.css" media="screen" >
+    <link rel="stylesheet" href="/lib/options-admin/css/animate-css/animate.min.css" media="screen">
+    <link rel="stylesheet" href="/lib/options-admin/css/lobipanel/lobipanel.min.css" media="screen">
+
+    <!-- ========== PAGE STYLES ========== -->
+    <link rel="stylesheet" href="/lib/options-admin/css/prism/prism.css" media="screen" > <!-- USED FOR DEMO HELP - YOU CAN REMOVE IT -->
+    <link rel="stylesheet" href="/lib/options-admin/css/toastr/toastr.min.css" media="screen" >
+    <link rel="stylesheet" href="/lib/options-admin/css/icheck/skins/line/blue.css" >
+    <link rel="stylesheet" href="/lib/options-admin/css/icheck/skins/line/red.css" >
+    <link rel="stylesheet" href="/lib/options-admin/css/icheck/skins/line/green.css" >
+
+    <!-- ========== THEME CSS ========== -->
+    <link rel="stylesheet" href="/lib/options-admin/css/main.min.css" media="screen" >
+
+    <link rel="stylesheet" href="/lib/options-admin/css/font-awesome.min.css" media="screen" >
+
+    <!-- ========== EXTERNAL CSS ========== -->
+    <link href="/css/anno.css" rel="stylesheet" type="text/css" />
+
+    <!-- ========== OWN CSS ========== -->
+    <link rel="stylesheet" href="/css/main.css" media="screen" >
+
+    {% block stylesheets %}{% endblock %}
+</head>
+<body class="top-navbar-fixed pace-done">
+<div class="main-wrapper">
+    <header>
+        <nav class="navbar top-navbar bg-black-300 box-shadow">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="navbar-header no-padding">
+                        <a class="navbar-brand" href="/">
+                            <img src="/img/logoLetras.png" alt="Cuentas - cicloTIC" class="logo">
+                        </a>
+                        <span class="small-nav-handle hidden-sm hidden-xs"><i class="fa fa-outdent"></i></span>
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <i class="fa fa-ellipsis-v"></i>
+                        </button>
+                        <button type="button" class="navbar-toggle mobile-nav-toggle">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                    </div>
+                    <!-- /.navbar-header -->
+
+                    <div class="collapse navbar-collapse" id="navbar-collapse-1">
+                        <ul class="nav navbar-nav" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
+                            <li class="hidden-sm hidden-xs"><a href="#" class="user-info-handle"><i class="fa fa-user"></i></a></li>
+                            <li class="hidden-sm hidden-xs"><a href="#" class="full-screen-handle"><i class="fa fa-arrows-alt"></i></a></li>
+                            <li><a href="/">Cuentas</a></li>
+                        </ul>
+                        <!-- /.nav navbar-nav -->
+
+                        <ul class="nav navbar-nav navbar-right" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle bg-primary" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-plus-circle"></i> Crear <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="/empresas/crear"><i class="fa fa-plus-square-o"></i> Empresa</a></li>
+                                    <li><a href="/iva/crear"><i class="fa fa-plus-square-o"></i> Iva</a></li>
+                                    <li><a href="/irpf/crear"><i class="fa fa-plus-square-o"></i> Irpf</a></li>
+                                    <li><a href="/metodospago/crear"><i class="fa fa-plus-square-o"></i> Método de pago</a></li>
+                                    <li><a href="/tarifas/crear"><i class="fa fa-plus-square-o"></i> Tarifa</a></li>
+                                    <li><a href="/bancos/crear"><i class="fa fa-plus-square-o"></i> Banco</a></li>
+                                    <li><a href="/zonas/crear"><i class="fa fa-plus-square-o"></i> Zona de realización</a></li>
+                                    <li><a href="/procedencias/crear"><i class="fa fa-plus-square-o"></i> Procedencia</a></li>
+                                    <li><a href="/usuarios/crear"><i class="fa fa-plus-square-o"></i> Usuario</a></li>
+                                </ul>
+                            </li>
+                            <!-- /.dropdown -->
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-th"></i></a>
+                                <div class="row dropdown-menu profile-dropdown">
+                                    {{ include('appsMenu.html.twig') }}
+                                </div>
+                            </li>
+                            <!-- /.dropdown -->
+                            <li><a href="#" class="hidden-xs hidden-sm open-right-sidebar"><i class="fa fa-ellipsis-v"></i></a></li>
+                        </ul>
+                        <!-- /.nav navbar-nav navbar-right -->
+                    </div>
+                    <!-- /.navbar-collapse -->
+                </div>
+                <!-- /.row -->
+            </div>
+        </nav>
+    </header>
+
+    <section>
+        <div class="content-wrapper">
+            <div class="left-sidebar bg-black-300 box-shadow">
+                <div class="sidebar-content">
+                    <div class="user-info">
+                        <img src="http://placehold.it/90/c2c2c2?text=User" alt="John Doe" class="img-circle profile-img">
+                        {% if configuration.request is defined %}<h6 class="title">{{ configuration.request.user }}</h6>{% endif %}
+                        {{ include('company.html.twig') }}
+                    </div>
+                    <!-- /.user-info -->
+
+                    <div class="sidebar-nav">
+                        <ul class="side-nav child-nav color-gray">
+                            <li>
+                                <a href="/"><i class="fa fa-dashboard"></i> <span>Inicio</span></a>
+                            </li>
+                            <li class="has-children">
+                                <a href="/empresas/listado"><i class="fa fa-briefcase"></i> <span>Empresas</span> <i class="fa fa-angle-right arrow"></i></a>
+                                <ul class="child-nav" style="display: none;">
+                                    <li><a href="/empresas/listado"><i class="fa fa-bars"></i> <span>Listado</span></a></li>
+                                    <li><a href="/empresas/crear"><i class="fa fa-plus-square-o"></i> <span>Crear</span></a></li>
+                                </ul>
+                            </li>
+                            <li class="has-children">
+                                <a href="/iva/listado"><i class="fa fa-money"></i> <span>Iva</span> <i class="fa fa-angle-right arrow"></i></a>
+                                <ul class="child-nav" style="display: none;">
+                                    <li><a href="/iva/listado"><i class="fa fa-bars"></i> <span>Listado</span></a></li>
+                                    <li><a href="/iva/crear"><i class="fa fa-plus-square-o"></i> <span>Crear</span></a></li>
+                                </ul>
+                            </li>
+                            <li class="has-children">
+                                <a href="/irpf/listado"><i class="fa fa-money"></i> <span>Irpf</span> <i class="fa fa-angle-right arrow"></i></a>
+                                <ul class="child-nav" style="display: none;">
+                                    <li><a href="/irpf/listado"><i class="fa fa-bars"></i> <span>Listado</span></a></li>
+                                    <li><a href="/irpf/crear"><i class="fa fa-plus-square-o"></i> <span>Crear</span></a></li>
+                                </ul>
+                            </li>
+                            <li class="has-children">
+                                <a href="/metodospago/listado"><i class="fa fa-money"></i> <span>Métodos de pago</span> <i class="fa fa-angle-right arrow"></i></a>
+                                <ul class="child-nav" style="display: none;">
+                                    <li><a href="/metodospago/listado"><i class="fa fa-bars"></i> <span>Listado</span></a></li>
+                                    <li><a href="/metodospago/crear"><i class="fa fa-plus-square-o"></i> <span>Crear</span></a></li>
+                                </ul>
+                            </li>
+                            <li class="has-children">
+                                <a href="/tarifas/listado"><i class="fa fa-euro"></i> <span>Tarifas</span> <i class="fa fa-angle-right arrow"></i></a>
+                                <ul class="child-nav" style="display: none;">
+                                    <li><a href="/tarifas/listado"><i class="fa fa-bars"></i> <span>Listado</span></a></li>
+                                    <li><a href="/tarifas/crear"><i class="fa fa-plus-square-o"></i> <span>Crear</span></a></li>
+                                </ul>
+                            </li>
+                            <li class="has-children">
+                                <a href="/bancos/listado"><i class="fa fa-bank"></i> <span>Bancos</span> <i class="fa fa-angle-right arrow"></i></a>
+                                <ul class="child-nav" style="display: none;">
+                                    <li><a href="/bancos/listado"><i class="fa fa-bars"></i> <span>Listado</span></a></li>
+                                    <li><a href="/bancos/crear"><i class="fa fa-plus-square-o"></i> <span>Crear</span></a></li>
+                                </ul>
+                            </li>
+                            <li class="has-children">
+                                <a href="/zonas/listado"><i class="fa fa-map"></i> <span>Zonas de realización</span> <i class="fa fa-angle-right arrow"></i></a>
+                                <ul class="child-nav" style="display: none;">
+                                    <li><a href="/zonas/listado"><i class="fa fa-bars"></i> <span>Listado</span></a></li>
+                                    <li><a href="/zonas/crear"><i class="fa fa-plus-square-o"></i> <span>Crear</span></a></li>
+                                </ul>
+                            </li>
+                            <li class="has-children">
+                                <a href="/procedencias/listado"><i class="fa fa-map"></i> <span>Procedencias</span> <i class="fa fa-angle-right arrow"></i></a>
+                                <ul class="child-nav" style="display: none;">
+                                    <li><a href="/procedencias/listado"><i class="fa fa-bars"></i> <span>Listado</span></a></li>
+                                    <li><a href="/procedencias/crear"><i class="fa fa-plus-square-o"></i> <span>Crear</span></a></li>
+                                </ul>
+                            </li>
+                            <li class="has-children">
+                                <a href="/usuarios/listado"><i class="fa fa-users"></i> <span>Usuarios</span> <i class="fa fa-angle-right arrow"></i></a>
+                                <ul class="child-nav" style="display: none;">
+                                    <li><a href="/usuarios/listado"><i class="fa fa-bars"></i> <span>Listado</span></a></li>
+                                    <li><a href="/usuarios/crear"><i class="fa fa-user-plus"></i> <span>Crear</span></a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="/sistema/modificar"><i class="fa fa-gear"></i> <span>Sistema</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /.sidebar-nav -->
+                </div>
+                <!-- /.sidebar-content -->
+            </div>
+
+            <div class="main-page">
+                {% block content %}{% endblock %}
+            </div>
+
+            <div class="right-sidebar bg-white fixed-sidebar">
+                <div class="sidebar-content">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>¿Cómo funciona? <i class="fa fa-times close-icon"></i></h4>
+                                {% block tutorial %}<p>Toda la información necesaria para hacer servir esta página.</p>{% endblock %}
+                            </div>
+                            <!-- /.col-md-12 -->
+                        </div>
+                        <!-- /.row -->
+                    </div>
+                    <!-- /.container-fluid -->
+                </div>
+                <!-- /.sidebar-content -->
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- ========== COMMON JS FILES ========== -->
+<script src="/lib/options-admin/js/jquery/jquery-2.2.4.min.js"></script>
+<script src="/lib/options-admin/js/jquery-ui/jquery-ui.min.js"></script>
+<script src="/lib/options-admin/js/bootstrap/bootstrap.min.js"></script>
+<script src="/lib/options-admin/js/pace/pace.min.js"></script>
+<script src="/lib/options-admin/js/lobipanel/lobipanel.min.js"></script>
+<script src="/lib/options-admin/js/iscroll/iscroll.js"></script>
+
+<!-- ========== PAGE JS FILES ========== -->
+<script src="/lib/options-admin/js/prism/prism.js"></script>
+<script src="/lib/options-admin/js/waypoint/waypoints.min.js"></script>
+<script src="/lib/options-admin/js/counterUp/jquery.counterup.min.js"></script>
+<script src="/lib/options-admin/js/amcharts/amcharts.js"></script>
+<script src="/lib/options-admin/js/amcharts/serial.js"></script>
+<script src="/lib/options-admin/js/amcharts/plugins/export/export.min.js"></script>
+<link rel="stylesheet" href="/lib/options-admin/js/amcharts/plugins/export/export.css" type="text/css" media="all" />
+<script src="/lib/options-admin/js/amcharts/themes/light.js"></script>
+<script src="/lib/options-admin/js/toastr/toastr.min.js"></script>
+<script src="/lib/options-admin/js/icheck/icheck.min.js"></script>
+
+<!-- ========== THEME JS ========== -->
+<script src="/lib/options-admin/js/main.js"></script>
+<script src="/lib/options-admin/js/production-chart.js"></script>
+<script src="/lib/options-admin/js/traffic-chart.js"></script>
+<script src="/lib/options-admin/js/task-list.js"></script>
+
+<!-- ========== EXTERNAL JS ========== -->
+<script src="/js/anno.js" type="text/javascript"></script>
+<script src="/js/annyang.min.js"></script>
+<script src="/js/speechkitt.min.js"></script>
+
+<!-- ========== OWN JS ========== -->
+<script src="/js/main.js"></script>
+
+{% block scriptsjs %}{% endblock %}
+
+<script type="text/javascript">
+    if (annyang) {
+        annyang.setLanguage('es');
+        annyang.start();
+
+        // Tell KITT to use annyang
+        SpeechKITT.annyang();
+
+        // Define a stylesheet for KITT to use
+        SpeechKITT.setStylesheet('/css/speech-kitt-themes/flat.css');
+
+        // Render KITT's interface
+        setInterval(function(){
+            var sentence = SpeechKITT.getLastRecognizedSentence();
+            SpeechKITT.setRecognizedSentence(sentence);
+            $('#skitt-listening-text__recognized-sentence').show();
+        }, 500);
+        SpeechKITT.displayRecognizedSentence(true);
+        SpeechKITT.setToggleLabelText('Activar');
+        SpeechKITT.setInstructionsText('¿En qué puedo ayudarte? ');
+        SpeechKITT.vroom();
+    }
+</script>
+
+</body>
+</html>

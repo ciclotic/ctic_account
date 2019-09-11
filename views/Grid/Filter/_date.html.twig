@@ -1,0 +1,4 @@
+{% import '/Form/theme.html.twig' as formTheme %}
+
+{{ formTheme.form_row(form.from, {'label': filter.label, 'name': filter.name, 'id': filter.name}) }}
+{{ formTheme.form_row(form.to) }}
