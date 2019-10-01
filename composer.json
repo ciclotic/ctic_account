@@ -26,7 +26,8 @@
         "symfony/translation": "^4.2",
         "cocur/slugify": "^3.1",
         "mpdf/mpdf": "^7.1",
-        "phpmailer/phpmailer": "^6.0"
+        "phpmailer/phpmailer": "^6.0",
+        "api-platform/api-pack": "^1.2"
     },
     "autoload": {
         "psr-4": {
